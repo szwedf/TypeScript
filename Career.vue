@@ -7,25 +7,31 @@
       <div class="timeline-item">
         <h2>2024年01月〜現在｜金融系 基盤保守・運用改善</h2>
         <p>
-          【主な環境】Solaris 11／Windows Server 2016／Windows 10→11 Enterprise／Oracle 12cR2／
-          JP1（AJS3／IM）／vCenter／Commvault／Windows Defender／TeraTerm／PowerShell／bat／ksh／
-          Excel／Access／VBA など
+          【主な環境】Solaris 11／Windows Server 2016／Windows 10→11
+          Enterprise／Oracle 12cR2／
+          JP1（AJS3／IM）／vCenter／Commvault／Windows
+          Defender／TeraTerm／PowerShell／bat／ksh／ Excel／Access／VBA など
         </p>
         <p>
-          【担当業務】<br>
-          ・JP1 を用いた週次／月次バッチの監視、異常終了時の切り分けとリラン・保留解除対応<br>
-          ・TeraTerm＋シェルでのバッチ処理時間調査、サーバ容量／表領域／USNジャーナルなどの各種リソース調査<br>
-          ・Windows Defender クイックスキャンの一斉実行とログ解析、Excel マクロでのグラフ化／可視化<br>
-          ・EUC データロード、tar 取得やログファイルのマクロ整形など、運用データの集計・レポート作成<br>
-          ・bat／ksh／パラメータファイルの修正（リトライ・スリープ挿入など）と単体／結合テスト、diff による差分取得と証跡作成<br>
-          ・暗号鍵更改、デバイスロック設定、プリンタドライバ配布、JP1 ジョブ追加／設定変更などの
-            設計〜手順書作成〜本番作業実施<br>
-          ・障害訓練（フェイルオーバー／フェイルバック）の参加、本番障害時の原因調査用資料取得・手順整備<br>
-          ・vCenter証明書更新、Commvault 文字化け調査などのインフラ改善タスク<br>
-          ・サーバ稼働状況レポートの作成（CPU・メモリ Pages/sec 等のトレンドとイベントログの相関分析）と
-            上位担当者への説明・質疑応答<br>
+          【担当業務】<br />
+          ・JP1
+          を用いた週次／月次バッチの監視、異常終了時の切り分けとリラン・保留解除対応<br />
+          ・TeraTerm＋シェルでのバッチ処理時間調査、サーバ容量／表領域／USNジャーナルなどの各種リソース調査<br />
+          ・Windows Defender クイックスキャンの一斉実行とログ解析、Excel
+          マクロでのグラフ化／可視化<br />
+          ・EUC データロード、tar
+          取得やログファイルのマクロ整形など、運用データの集計・レポート作成<br />
+          ・bat／ksh／パラメータファイルの修正（リトライ・スリープ挿入など）と単体／結合テスト、diff
+          による差分取得と証跡作成<br />
+          ・暗号鍵更改、デバイスロック設定、プリンタドライバ配布、JP1
+          ジョブ追加／設定変更などの 設計〜手順書作成〜本番作業実施<br />
+          ・障害訓練（フェイルオーバー／フェイルバック）の参加、本番障害時の原因調査用資料取得・手順整備<br />
+          ・vCenter証明書更新、Commvault 文字化け調査などのインフラ改善タスク<br />
+          ・サーバ稼働状況レポートの作成（CPU・メモリ Pages/sec
+          等のトレンドとイベントログの相関分析）と
+          上位担当者への説明・質疑応答<br />
           ・結合テスト要項書／本番手順書／設計書の作成とレビュー対応を通じて、
-            「設計〜テスト〜本番作業」の一連の流れを経験
+          「設計〜テスト〜本番作業」の一連の流れを経験
         </p>
       </div>
 
@@ -34,8 +40,9 @@
         <h2>2024年09月〜2024年12月｜インフラ基盤のスクリプト改修・テスト</h2>
         <p>
           銀行システムのインフラ基盤で、既存スクリプトの調査・修正・改修、新規スクリプト作成を担当。
-          Pacemaker／Lifekeeper／IBM Tivoli Monitoring Agent／Netcool Operation Insights 向けに
-          シェルスクリプトや bat を実装し、UT・バッチ動作確認・エビデンス取得まで一貫して対応。
+          Pacemaker／Lifekeeper／IBM Tivoli Monitoring Agent／Netcool Operation
+          Insights 向けに シェルスクリプトや bat
+          を実装し、UT・バッチ動作確認・エビデンス取得まで一貫して対応。
         </p>
       </div>
 
@@ -80,7 +87,8 @@
         <h2>2020年02月〜2020年04月｜ショッピングセンターECサイトの運用監視</h2>
         <p>
           JP1 を用いた EC サイトの監視・運用保守を担当。
-          監視アラート対応、本番環境へのファイル移管、AWS／Backlog を使った資材管理、
+          監視アラート対応、本番環境へのファイル移管、AWS／Backlog
+          を使った資材管理、
           セキュリティルーム入室申請、データ抽出・集計などを経験。
         </p>
       </div>
@@ -88,37 +96,35 @@
   </section>
 </template>
 
-  
-  <script lang="ts">
-  import { defineComponent } from 'vue';
-  export default defineComponent({
-    name: 'Career'
-  });
-  </script>
-  
-  <style scoped>
-  .career {
-    padding: 40px 20px;
-    text-align: center;
-  }
-  
-  .timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
+  name: "Career",
+});
+</script>
+
+<style scoped>
+.career {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.timeline-item {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
   .timeline-item {
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    padding: 15px;
   }
-  
-  /* レスポンシブ対応 */
-  @media (max-width: 768px) {
-    .timeline-item {
-      padding: 15px;
-    }
-  }
-  </style>
-  
+}
+</style>
