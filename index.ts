@@ -5,6 +5,7 @@ import About from '../components/About.vue';
 import Career from '../components/Career.vue';
 import Skills from '../components/Skills.vue';
 import Contact from '../components/Contact.vue';
+import Works from '../components/Works.vue'; // ★ ファイル名に合わせて変更
 
 const routes = [
   {
@@ -36,6 +37,12 @@ const routes = [
     name: 'Skills',
     component: Skills,
     meta: { transition: 'flip' },
+  },
+  {
+    path: '/works',              // ★ 作品一覧ページ
+    name: 'Works',
+    component: Works,
+    meta: { transition: 'slide-right' }, // 好きなアニメーション名でOK
   },
   {
     path: '/contact',

@@ -8,6 +8,7 @@
         <router-link to="/about" @click="close">About</router-link>
         <router-link to="/career" @click="close">Career</router-link>
         <router-link to="/skills" @click="close">Skills</router-link>
+        <RouterLink to="/works">Works</RouterLink>
         <router-link to="/contact" @click="close">Contact</router-link>
       </nav>
   
