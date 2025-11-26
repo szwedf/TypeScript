@@ -75,6 +75,7 @@ src/
     About.vue           # 自己紹介ページ
     Skills.vue          # スキル一覧ページ
     Career.vue          # 職務経歴タイムライン
+    Works.Vue           # 作品紹介ページ
     Contact.vue         # お問い合わせページ
   App.vue               # ルートコンポーネント
   main.ts               # エントリーポイント（Vue / Router のマウント）
