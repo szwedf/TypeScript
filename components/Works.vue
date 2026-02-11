@@ -1,42 +1,44 @@
-<!-- src/components/Works.vue -->
 <template>
-  <section class="works">
-    <h1 class="works-title">Works</h1>
-    <p class="works-lead">
-      個人開発で作成した Web サイトや学習用の制作物です。<br />
-      カードをクリックすると、作品の概要や使用技術、こだわったポイントを確認できます。
-    </p>
+  <section class="works-page">
+    <header class="works-hero">
+      <h1 class="title">Works</h1>
+      <p class="lead">
+        作ったものは、作っただけじゃなく「説明できて初めて武器」。
+        ここはその武器庫です。
+      </p>
+    </header>
 
     <div class="works-grid">
       <RouterLink
         v-for="work in works"
         :key="work.id"
-        :to="{ name: 'WorkDetail', params: { id: work.id } }"
         class="work-card"
+        :to="{ name: 'WorkDetail', params: { id: work.id } }"
       >
-        <div v-if="work.thumbnail" class="work-thumb">
-          <img :src="work.thumbnail" :alt="work.title" loading="lazy" />
+        <div class="thumb">
+          <img
+            :src="withBase(work.images.cover)"
+            :alt="work.title"
+            loading="lazy"
+          />
+          <div class="thumb-overlay" />
         </div>
 
-        <div class="work-body">
-          <h2 class="work-name">{{ work.title }}</h2>
-          <p class="work-period">{{ work.period }}</p>
-          <p class="work-summary">
-            {{ work.summary }}
-          </p>
+        <div class="card-body">
+          <div class="card-head">
+            <h2 class="work-title">{{ work.title }}</h2>
+            <p class="work-subtitle">{{ work.subtitle }}</p>
+          </div>
 
-          <ul class="work-tags">
-            <li
-              v-for="tag in work.techStack"
-              :key="tag"
-              class="tag-chip"
-            >
-              {{ tag }}
-            </li>
+          <p class="work-desc">{{ work.description }}</p>
+
+          <ul class="chips">
+            <li v-for="s in work.stack" :key="s" class="chip">{{ s }}</li>
           </ul>
 
-          <div class="work-links">
-            <span class="work-detail-link">View Detail →</span>
+          <div class="cta">
+            <span>詳細を見る</span>
+            <span class="arrow">→</span>
           </div>
         </div>
       </RouterLink>
@@ -45,171 +47,147 @@
 </template>
 
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
+import { works } from "@/data/works";
 
-type Work = {
-  id: number;
-  title: string;
-  period: string;
-  summary: string;
-  techStack: string[];
-  thumbnail?: string;
+/**
+ * 画像パスの「本番環境のベースパス問題」を潰す関数。
+ * - Vercel: BASE_URL は "/" なのでそのまま
+ * - GitHub Pages: BASE_URL が "/repo-name/" になっても壊れない
+ */
+const withBase = (path: string) => {
+  const base = import.meta.env.BASE_URL; // "/" or "/repo/"
+  return `${base}${path}`.replace(/\/{2,}/g, "/");
 };
-
-// ひとまずこのコンポーネント内にベタ書き（まずは確実に動かす）
-const works: Work[] = [
-  {
-    id: 1,
-    title: 'My Lab – Vue + TS ポートフォリオ',
-    period: '2024–2025',
-    summary:
-      '現在ご覧いただいているポートフォリオ。Vue 3 + TypeScript を用いて、Welcome / About / Career / Skills / Works / Contact を SPA 構成で実装。',
-    techStack: ['Vue 3', 'TypeScript', 'Vite', 'Vue Router'],
-    thumbnail: '/images/portfolio-thumb.png', // 画像がなければここは一旦消してOK
-  },
-  {
-    id: 2,
-    title: 'Café Lumière – カフェサイト（学習用）',
-    period: '2024',
-    summary:
-      '表参道のカフェをイメージした LP。メニュー表示やレスポンシブ対応を通して、レイアウトとUIコンポーネントの練習として制作。',
-    techStack: ['HTML', 'CSS', 'JavaScript', 'Vue 3'],
-    thumbnail: '/images/cafe-thumb.png',
-  },
-  {
-    id: 3,
-    title: 'Hotel Luxe – 高級ホテルサイト（学習用）',
-    period: '2024',
-    summary:
-      '高級ホテルをテーマにしたギャラリーサイト。トップとギャラリーを分け、写真中心のレイアウトとホバーアニメーションを実装。',
-    techStack: ['HTML', 'CSS', 'JavaScript'],
-    thumbnail: '/images/hotel-thumb.png',
-  },
-];
 </script>
 
 <style scoped>
-.works {
-  max-width: 1120px;
+.works-page {
+  min-height: calc(100vh - 160px);
+  padding: 80px 24px;
+  background: radial-gradient(circle at 20% 10%, #f4fbff 0%, #f2f7ff 45%, #f6fbff 100%);
+}
+
+.works-hero {
+  max-width: 980px;
+  margin: 0 auto 28px;
+  text-align: center;
+}
+.title {
+  font-size: 44px;
+  letter-spacing: 0.02em;
+  margin: 0 0 10px;
+}
+.lead {
   margin: 0 auto;
-  padding: 4rem 1.5rem 5rem;
-}
-
-.works-title {
-  font-size: 2.4rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-.works-lead {
   max-width: 760px;
-  margin: 0 auto 3rem;
-  text-align: center;
   line-height: 1.8;
-  color: #4b5563;
-  font-size: 0.98rem;
+  color: #334155;
 }
 
 .works-grid {
+  max-width: 1100px;
+  margin: 22px auto 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.6rem;
+  gap: 18px;
+  grid-template-columns: repeat(12, 1fr);
 }
 
 .work-card {
-  display: flex;
-  flex-direction: column;
+  grid-column: span 6;
+  display: block;
   text-decoration: none;
-  background: rgba(255, 255, 255, 0.96);
-  border-radius: 18px;
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-  border: 1px solid rgba(209, 213, 219, 0.9);
-  overflow: hidden;
   color: inherit;
-  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  transform: translateY(0);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
-
 .work-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 24px 55px rgba(15, 23, 42, 0.16);
-  border-color: #93c5fd;
+  transform: translateY(-2px);
+  border-color: rgba(15, 23, 42, 0.18);
+  box-shadow: 0 26px 56px rgba(15, 23, 42, 0.12);
 }
 
-.work-thumb {
-  width: 100%;
-  aspect-ratio: 16 / 9;
+.thumb {
+  position: relative;
+  height: 220px;
   overflow: hidden;
 }
-
-.work-thumb img {
+.thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.4s ease;
+  transform: scale(1.02);
+}
+.thumb-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(2, 6, 23, 0.05), rgba(2, 6, 23, 0.20));
 }
 
-.work-card:hover .work-thumb img {
-  transform: scale(1.03);
+.card-body {
+  padding: 16px 16px 14px;
 }
-
-.work-body {
-  padding: 1.1rem 1.3rem 1.2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
+.work-title {
+  margin: 0;
+  font-size: 18px;
 }
-
-.work-name {
-  font-size: 1.08rem;
-  font-weight: 600;
+.work-subtitle {
+  margin: 6px 0 10px;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.6;
 }
-
-.work-period {
-  font-size: 0.8rem;
-  color: #6b7280;
-}
-
-.work-summary {
-  font-size: 0.9rem;
-  color: #4b5563;
+.work-desc {
+  margin: 0 0 10px;
+  color: #334155;
+  font-size: 14px;
   line-height: 1.7;
-  margin-top: 0.2rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.work-tags {
+.chips {
+  margin: 0;
+  padding: 0;
+  list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-top: 0.4rem;
+  gap: 8px;
 }
-
-.tag-chip {
-  font-size: 0.78rem;
-  padding: 0.16rem 0.55rem;
+.chip {
+  font-size: 12px;
+  padding: 6px 10px;
   border-radius: 999px;
-  background: #eff6ff;
-  color: #1d4ed8;
+  background: rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(15, 23, 42, 0.10);
 }
 
-.work-links {
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
-  color: #2563eb;
+.cta {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  color: #0f172a;
+}
+.arrow {
+  display: inline-block;
+  transform: translateX(0);
+  transition: transform .18s ease;
+}
+.work-card:hover .arrow {
+  transform: translateX(3px);
 }
 
-.work-detail-link {
-  font-weight: 500;
-}
-
-@media (max-width: 640px) {
-  .works {
-    padding-top: 3.4rem;
-  }
-
-  .works-title {
-    font-size: 2rem;
-  }
+@media (max-width: 920px) {
+  .work-card { grid-column: span 12; }
+  .title { font-size: 36px; }
 }
 </style>

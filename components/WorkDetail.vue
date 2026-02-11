@@ -1,245 +1,217 @@
-<!-- src/components/WorkDetail.vue -->
 <template>
-  <section v-if="work" class="work-detail">
-    <button class="back-btn" type="button" @click="goBack">
-      ← Back to Works
-    </button>
-
-    <div class="head">
-      <p class="period">{{ work.period }}</p>
-      <h1 class="title">{{ work.title }}</h1>
-      <p class="role">{{ work.role }}</p>
-    </div>
-
-    <div class="tags">
-      <span
-        v-for="tag in work.techStack"
-        :key="tag"
-        class="tag-chip"
-      >
-        {{ tag }}
-      </span>
-    </div>
-
-    <div class="layout">
-      <div class="main">
-        <h2 class="sub-title">Overview</h2>
-        <p class="text">
-          {{ work.summary }}
-        </p>
-
-        <h2 class="sub-title">What I Focused On</h2>
-        <ul class="feature-list">
-          <li v-for="(f, idx) in work.features" :key="idx">
-            {{ f }}
-          </li>
-        </ul>
+  <section class="detail-page">
+    <div class="wrap" v-if="work">
+      <div class="topbar">
+        <RouterLink class="back" to="/works">← 一覧へ戻る</RouterLink>
       </div>
 
-      <aside class="side">
-        <div v-if="work.thumbnail" class="thumb">
-          <img :src="work.thumbnail" :alt="work.title" loading="lazy" />
+      <header class="hero">
+        <div class="hero-text">
+          <h1 class="title">{{ work.title }}</h1>
+          <p class="subtitle">{{ work.subtitle }}</p>
+          <p class="desc">{{ work.description }}</p>
+
+          <div class="links" v-if="work.links?.demo || work.links?.repo">
+            <a
+              v-if="work.links?.demo"
+              class="btn"
+              :href="work.links.demo"
+              target="_blank"
+              rel="noreferrer"
+            >Demo</a>
+            <a
+              v-if="work.links?.repo"
+              class="btn ghost"
+              :href="work.links.repo"
+              target="_blank"
+              rel="noreferrer"
+            >GitHub</a>
+          </div>
         </div>
 
-        <div class="links">
-          <a
-            v-if="work.demoUrl"
-            :href="work.demoUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="link primary"
-          >
-            Visit Demo
-          </a>
-          <a
-            v-if="work.repoUrl"
-            :href="work.repoUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="link"
-          >
-            View on GitHub
-          </a>
+        <div class="hero-media">
+          <img :src="withBase(work.images.cover)" :alt="work.title" />
         </div>
-      </aside>
+      </header>
+
+      <section class="block">
+        <h2 class="h2">Highlights</h2>
+        <ul class="list">
+          <li v-for="h in work.highlights" :key="h">{{ h }}</li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2 class="h2">Tech Stack</h2>
+        <ul class="chips">
+          <li v-for="s in work.stack" :key="s" class="chip">{{ s }}</li>
+        </ul>
+      </section>
+
+      <section class="block" v-if="work.images.gallery?.length">
+        <h2 class="h2">Gallery</h2>
+        <div class="gallery">
+          <img
+            v-for="src in work.images.gallery"
+            :key="src"
+            :src="withBase(src)"
+            :alt="work.title"
+            loading="lazy"
+          />
+        </div>
+      </section>
     </div>
-  </section>
 
-  <section v-else class="work-detail not-found">
-    <p>指定された作品が見つかりませんでした。</p>
-    <button class="back-btn" type="button" @click="goBack">
-      ← Back to Works
-    </button>
+    <div class="wrap" v-else>
+      <p class="notfound">作品が見つかりませんでした。</p>
+      <RouterLink class="back" to="/works">← 一覧へ戻る</RouterLink>
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { works } from '../data/works';
-import type { Work } from '../data/works';
+import { computed } from "vue";
+import { getWorkById } from "@/data/works";
 
-const route = useRoute();
-const router = useRouter();
+const props = defineProps<{ id: string }>();
 
-const work = computed<Work | undefined>(() => {
-  const id = Number(route.params.id);
-  if (Number.isNaN(id)) return undefined;
-  return works.find((w) => w.id === id);
-});
+const work = computed(() => getWorkById(props.id));
 
-const goBack = () => {
-  router.push({ name: 'Works' });
+const withBase = (path: string) => {
+  const base = import.meta.env.BASE_URL;
+  return `${base}${path}`.replace(/\/{2,}/g, "/");
 };
 </script>
 
 <style scoped>
-.work-detail {
-  max-width: 1120px;
+.detail-page {
+  padding: 70px 24px;
+  background: radial-gradient(circle at 20% 10%, #f4fbff 0%, #f2f7ff 45%, #f6fbff 100%);
+  min-height: calc(100vh - 160px);
+}
+.wrap {
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 4rem 1.5rem 5rem;
 }
-
-.not-found {
-  text-align: center;
+.topbar {
+  margin-bottom: 14px;
 }
-
-.back-btn {
-  border: none;
-  background: transparent;
-  color: #2563eb;
-  font-size: 0.9rem;
-  cursor: pointer;
-  margin-bottom: 1.4rem;
-  padding: 0;
-}
-
-.head {
-  margin-bottom: 1.5rem;
-}
-
-.period {
-  font-size: 0.85rem;
-  color: #6b7280;
-}
-
-.title {
-  font-size: 2rem;
+.back {
+  text-decoration: none;
+  color: #0f172a;
   font-weight: 700;
-  margin: 0.2rem 0 0.4rem;
 }
 
-.role {
-  font-size: 0.95rem;
-  color: #4b5563;
-}
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-bottom: 2rem;
-}
-
-.tag-chip {
-  font-size: 0.78rem;
-  padding: 0.14rem 0.55rem;
-  border-radius: 999px;
-  background: #eff6ff;
-  color: #1d4ed8;
-}
-
-.layout {
+.hero {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(260px, 0.9fr);
-  gap: 2rem;
-}
-
-.sub-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 0 0 0.6rem;
-}
-
-.text {
-  font-size: 0.95rem;
-  color: #4b5563;
-  line-height: 1.9;
-  margin-bottom: 1.6rem;
-}
-
-.feature-list {
-  padding-left: 1.2rem;
-  font-size: 0.94rem;
-  color: #374151;
-  line-height: 1.8;
-}
-
-.thumb {
-  width: 100%;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 18px;
+  padding: 18px;
   border-radius: 18px;
-  overflow: hidden;
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
-  margin-bottom: 1.5rem;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
 }
-
-.thumb img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
+.title {
+  margin: 0;
+  font-size: 34px;
+}
+.subtitle {
+  margin: 8px 0 10px;
+  color: #475569;
+}
+.desc {
+  margin: 0;
+  line-height: 1.85;
+  color: #334155;
 }
 
 .links {
+  margin-top: 14px;
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  gap: 10px;
 }
-
-.link {
+.btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.55rem 0.9rem;
-  border-radius: 999px;
-  border: 1px solid #d1d5db;
-  font-size: 0.9rem;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  background: #0f172a;
+  color: white;
   text-decoration: none;
-  color: #111827;
-  background: #f9fafb;
-  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  font-weight: 700;
+}
+.btn.ghost {
+  background: transparent;
+  color: #0f172a;
 }
 
-.link:hover {
-  background: #e5e7eb;
-  border-color: #9ca3af;
-  transform: translateY(-1px);
+.hero-media img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  display: block;
 }
 
-.link.primary {
-  background: #111827;
-  color: #f9fafb;
-  border-color: #111827;
+.block {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(15, 23, 42, 0.10);
+}
+.h2 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+.list {
+  margin: 0;
+  padding-left: 18px;
+  line-height: 1.9;
+  color: #334155;
 }
 
-.link.primary:hover {
-  background: #020617;
-  border-color: #020617;
+.chips {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chip {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(15, 23, 42, 0.10);
 }
 
-@media (max-width: 840px) {
-  .layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
+.gallery {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+}
+.gallery img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.10);
 }
 
-@media (max-width: 640px) {
-  .work-detail {
-    padding-top: 3.4rem;
-  }
+.notfound {
+  margin: 0 0 12px;
+  color: #334155;
+}
 
-  .title {
-    font-size: 1.7rem;
-  }
+@media (max-width: 920px) {
+  .hero { grid-template-columns: 1fr; }
+  .gallery { grid-template-columns: 1fr; }
+  .hero-media img { height: 220px; }
 }
 </style>
