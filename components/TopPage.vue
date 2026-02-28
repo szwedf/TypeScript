@@ -291,3 +291,39 @@ const spinCube = () => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 </style>
+<!-- src/components/TopPage.vue の hero 周りだけでもOK -->
+<style scoped>
+.hero {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 96px 16px 56px; /* 固定ナビ分を見越す */
+  background: linear-gradient(135deg, #e9f7ff, #f7fbff);
+  text-align: center;
+}
+
+.hero-title {
+  font-size: clamp(28px, 6vw, 56px);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+.hero-subtitle {
+  font-size: clamp(14px, 2.6vw, 18px);
+  margin: 14px 0 0;
+  opacity: 0.75;
+}
+
+.hero-button {
+  margin-top: 22px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  width: min(260px, 90%);
+}
+
+/* iPhone XR 近辺 */
+@media (max-width: 480px) {
+  .hero {
+    padding-top: 82px;
+  }
+}
+</style>

@@ -1,152 +1,127 @@
 <template>
   <section class="works-page">
-    <header class="works-hero">
-      <h1 class="title">Works</h1>
-      <p class="lead">
-        作ったものは、作っただけじゃなく「説明できて初めて武器」。
-        ここはその武器庫です。
-      </p>
-    </header>
+    <div class="container">
+      <header class="page-head">
+        <h1>Works</h1>
+        <p>制作物一覧（個人制作 / 学習アウトプット）</p>
+      </header>
 
-    <div class="works-grid">
-      <RouterLink
-        v-for="work in works"
-        :key="work.id"
-        class="work-card"
-        :to="{ name: 'WorkDetail', params: { id: work.id } }"
-      >
-        <div class="thumb">
-          <img
-            :src="withBase(work.images.cover)"
-            :alt="work.title"
-            loading="lazy"
-          />
-          <div class="thumb-overlay" />
-        </div>
-
-        <div class="card-body">
-          <div class="card-head">
-            <h2 class="work-title">{{ work.title }}</h2>
-            <p class="work-subtitle">{{ work.subtitle }}</p>
+      <div v-if="works.length" class="grid">
+        <RouterLink
+          v-for="w in works"
+          :key="w.id"
+          class="card"
+          :to="{ name: 'WorkDetail', params: { id: w.id } }"
+        >
+          <div class="thumb">
+            <img :src="withBase(w.images.cover)" :alt="w.title" loading="lazy" />
           </div>
 
-          <p class="work-desc">{{ work.description }}</p>
+          <div class="body">
+            <h2 class="title">{{ w.title }}</h2>
+            <p v-if="w.subtitle" class="subtitle">{{ w.subtitle }}</p>
+            <p class="desc">{{ w.description }}</p>
 
-          <ul class="chips">
-            <li v-for="s in work.stack" :key="s" class="chip">{{ s }}</li>
-          </ul>
+            <div class="chips">
+              <span v-for="t in w.tech.slice(0, 4)" :key="t" class="chip">{{ t }}</span>
+            </div>
 
-          <div class="cta">
-            <span>詳細を見る</span>
-            <span class="arrow">→</span>
+            <div class="cta">
+              <span>View detail →</span>
+            </div>
           </div>
-        </div>
-      </RouterLink>
+        </RouterLink>
+      </div>
+
+      <div v-else class="empty">
+        <p>まだ作品がありません（works.ts を確認してね）</p>
+      </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { works } from "@/data/works";
+import { works } from "../data/works";
 
-/**
- * 画像パスの「本番環境のベースパス問題」を潰す関数。
- * - Vercel: BASE_URL は "/" なのでそのまま
- * - GitHub Pages: BASE_URL が "/repo-name/" になっても壊れない
- */
-const withBase = (path: string) => {
-  const base = import.meta.env.BASE_URL; // "/" or "/repo/"
-  return `${base}${path}`.replace(/\/{2,}/g, "/");
-};
+const base = import.meta.env.BASE_URL ?? "/";
+const withBase = (p: string) => `${base}${p}`.replace(/\/{2,}/g, "/");
 </script>
 
 <style scoped>
+/* ページ共通：固定ヘッダーがある前提で上に余白 */
 .works-page {
-  min-height: calc(100vh - 160px);
-  padding: 80px 24px;
-  background: radial-gradient(circle at 20% 10%, #f4fbff 0%, #f2f7ff 45%, #f6fbff 100%);
+  padding: 92px 0 56px;
+  background: linear-gradient(135deg, #e9f7ff, #f7fbff);
 }
 
-.works-hero {
-  max-width: 980px;
-  margin: 0 auto 28px;
-  text-align: center;
-}
-.title {
-  font-size: 44px;
-  letter-spacing: 0.02em;
-  margin: 0 0 10px;
-}
-.lead {
+.container {
+  width: min(1100px, calc(100% - 32px));
   margin: 0 auto;
-  max-width: 760px;
-  line-height: 1.8;
-  color: #334155;
 }
 
-.works-grid {
-  max-width: 1100px;
-  margin: 22px auto 0;
+.page-head {
+  margin-bottom: 20px;
+}
+.page-head h1 {
+  font-size: clamp(28px, 4vw, 40px);
+  margin: 0 0 6px;
+}
+.page-head p {
+  margin: 0;
+  opacity: 0.75;
+}
+
+.grid {
   display: grid;
   gap: 18px;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
-.work-card {
-  grid-column: span 6;
-  display: block;
+.card {
+  display: grid;
+  grid-template-rows: auto 1fr;
   text-decoration: none;
   color: inherit;
   border-radius: 18px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(15, 23, 42, 0.10);
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-  transform: translateY(0);
-  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
-.work-card:hover {
+.card:hover {
   transform: translateY(-2px);
-  border-color: rgba(15, 23, 42, 0.18);
-  box-shadow: 0 26px 56px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.14);
 }
 
 .thumb {
-  position: relative;
-  height: 220px;
-  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: #f2f2f2;
 }
 .thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transform: scale(1.02);
-}
-.thumb-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(2, 6, 23, 0.05), rgba(2, 6, 23, 0.20));
 }
 
-.card-body {
-  padding: 16px 16px 14px;
+.body {
+  padding: 14px 14px 16px;
 }
-.work-title {
+.title {
   margin: 0;
   font-size: 18px;
 }
-.work-subtitle {
-  margin: 6px 0 10px;
-  color: #475569;
+.subtitle {
+  margin: 6px 0 0;
   font-size: 13px;
-  line-height: 1.6;
+  opacity: 0.7;
 }
-.work-desc {
-  margin: 0 0 10px;
-  color: #334155;
+.desc {
+  margin: 10px 0 12px;
   font-size: 14px;
-  line-height: 1.7;
+  opacity: 0.85;
+
+  /* 行数を抑えて見やすく */
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -154,9 +129,6 @@ const withBase = (path: string) => {
 }
 
 .chips {
-  margin: 0;
-  padding: 0;
-  list-style: none;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -165,29 +137,22 @@ const withBase = (path: string) => {
   font-size: 12px;
   padding: 6px 10px;
   border-radius: 999px;
-  background: rgba(15, 23, 42, 0.06);
-  border: 1px solid rgba(15, 23, 42, 0.10);
+  background: rgba(66, 185, 131, 0.12);
 }
 
 .cta {
   margin-top: 12px;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 600;
-  color: #0f172a;
-}
-.arrow {
-  display: inline-block;
-  transform: translateX(0);
-  transition: transform .18s ease;
-}
-.work-card:hover .arrow {
-  transform: translateX(3px);
+  font-size: 13px;
+  opacity: 0.9;
 }
 
-@media (max-width: 920px) {
-  .work-card { grid-column: span 12; }
-  .title { font-size: 36px; }
+/* iPhone XR 付近 */
+@media (max-width: 480px) {
+  .works-page {
+    padding-top: 78px;
+  }
+  .container {
+    width: calc(100% - 24px);
+  }
 }
 </style>
