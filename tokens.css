@@ -1,0 +1,47 @@
+:root {
+  /* layout */
+  --container-max: 1100px;
+
+  /* spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 48px;
+
+  /* radius */
+  --radius-1: 10px;
+  --radius-2: 14px;
+  --radius-3: 18px;
+
+  /* typography */
+  --text-0: 12px;
+  --text-1: 14px;
+  --text-2: 18px;
+  --text-3: 24px;
+  --text-4: 32px;
+
+  /* colors */
+  --color-muted: rgba(0,0,0,0.6);
+  --color-border: rgba(0,0,0,0.08);
+  --color-surface: rgba(255,255,255,0.85);
+
+  /* shadow */
+  --shadow-1: 0 10px 24px rgba(0,0,0,0.10);
+  --shadow-2: 0 18px 44px rgba(0,0,0,0.16);
+}
+
+/* common utilities */
+.container {
+  width: min(var(--container-max), 100% - (var(--space-6) * 2));
+  margin-inline: auto;
+}
+
+@media (max-width: 640px) {
+  .container {
+    width: min(var(--container-max), 100% - (var(--space-4) * 2));
+  }
+}

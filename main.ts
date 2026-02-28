@@ -1,12 +1,11 @@
 // src/main.ts
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './router';  // ルーター使ってるなら
+import router from './router';
+import "./tokens.css";
 
-// グローバルCSSを使ってるなら（なければこの1行は削ってOK）
-// import './assets/main.css';
+createApp(App)
+  .use(router)   // これを消してると router-view が動かない
+  .mount('#app'); // index.html 側の id と一致していること
 
-const app = createApp(App);
 
-app.use(router);
-app.mount('#app');
